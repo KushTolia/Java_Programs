@@ -1,0 +1,108 @@
+import java.util.*;
+import java.io.*; 
+class student
+{
+	static BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+	FileWriter fw;
+	static FileReader fr; 
+	String id,nm,phone_no;
+	double cpi;
+	student()
+	{
+		id=nm=phone_no=null;
+		cpi=0.0f;
+	}
+	student(String id,String nm,String phone_no,double cpi)
+	{
+		this.id=id;
+		this.nm=nm;
+		this.phone_no=phone_no;
+		this.cpi=cpi;
+	}
+	void get_data()
+	{
+		try{
+		System.out.println("Enter ID: ");
+		id=br.readLine();
+		System.out.println("Enter Name: ");
+		nm=br.readLine();
+		System.out.println("Enter Phone No: ");
+		phone_no=br.readLine();
+		System.out.println("Enter CPI: ");
+		cpi=Double.parseDouble(br.readLine());
+		store_file(this);
+		}
+		catch(Exception ex)
+		{
+			System.out.println(ex.toString());
+		}
+	}
+	void store_file(student s)
+	{
+		try{
+			fw=new FileWriter("students_detail.txt",true);
+			String dt=s.id+","+s.nm+","+s.phone_no+","+s.cpi;
+			fw.write(dt+"\n");
+			fw.close();
+		}
+		catch(Exception ex)	
+		{
+			System.out.println(ex.toString());
+		}
+	}
+	void search_id(String temp_id)
+	{	
+		int f=0;
+		try
+		{
+			fr=new FileReader("students_detail.txt");
+			BufferedReader br2=new BufferedReader(new FileReader("students_detail.txt"));
+			String line;
+			while((line=br2.readLine())!=null)
+			{
+				String[] student_info=line.split(",");
+				if(student_info[0].equals(temp_id))
+				{
+					System.out.println("ID: "+student_info[0]);
+					System.out.println("Name: "+student_info[1]);
+					System.out.println("Phone No: "+student_info[2]);
+					System.out.println("CPI: "+student_info[3]);
+					f=1;
+					break;
+				}
+			}
+			if(f==0)
+			{
+				System.out.println("No Record Found For That ID No");
+			}
+			br2.close();
+		}
+		catch(IOException ex)
+		{
+			System.out.println(ex.toString());
+		}
+	}
+	
+}
+class student_main
+{
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		int n,ch;
+		int ph;
+		double cpi;
+		String id,nm;
+		System.out.println("Enter No Of Students Data: ");		
+		n=sc.nextInt();
+		student s[]=new student[n];
+		for(int i=0;i<n;i++)
+		{	
+			s[i]=new student();
+			s[i].get_data();
+		}
+		System.out.println("Enter ID No To Search Student: ");
+		id=sc.next();
+		s[0].search_id(id);
+	}
+}
